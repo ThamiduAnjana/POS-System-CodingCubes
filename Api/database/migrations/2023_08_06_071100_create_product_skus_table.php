@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_skus', function (Blueprint $table) {
-            $table->id()->primary()->autoIncrement();
+            $table->id()->autoIncrement();
             $table->string('ref')->uuid();
             $table->integer('product_id')->nullable();
             $table->string('sku')->nullable();

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('system_entries', function (Blueprint $table) {
-            $table->id()->primary()->autoIncrement();
+            $table->id()->autoIncrement();
             $table->string('ref')->uuid();
             $table->integer('employee_id')->nullable();
             $table->integer('device_id')->nullable();

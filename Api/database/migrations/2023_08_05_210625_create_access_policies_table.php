@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('access_policies', function (Blueprint $table) {
-            $table->id()->primary()->autoIncrement();
+            $table->id()->autoIncrement();
             $table->string('ref')->uuid();
             $table->string('name')->nullable();
             $table->text('description')->nullable();

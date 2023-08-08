@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('return_invoices', function (Blueprint $table) {
-            $table->id()->primary()->autoIncrement();
+            $table->id()->autoIncrement();
             $table->string('ref')->uuid();
             $table->dateTime('date_time')->useCurrent();
             $table->integer('customer_id')->nullable();

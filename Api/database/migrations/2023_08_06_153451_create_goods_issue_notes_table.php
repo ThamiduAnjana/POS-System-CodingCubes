@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('goods_issue_notes', function (Blueprint $table) {
-            $table->id()->primary()->autoIncrement();
+            $table->id()->autoIncrement();
             $table->string('ref')->uuid();
             $table->dateTime('date_time')->useCurrent();
             $table->tinyInteger('is_advance')->default(0)->comment('0: no, 1: yes');
