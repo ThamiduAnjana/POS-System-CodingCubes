@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('credentials', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('ref')->uuid();
+            $table->string('username')->nullable();
             $table->string('password')->nullable();
             $table->string('validation_code')->nullable();
             $table->dateTime('validation_at')->nullable();
@@ -23,6 +24,14 @@ return new class extends Migration
             $table->dateTime('updated_at')->useCurrent();
             $table->integer('updated_by')->nullable();
         });
+
+        //Trigger
+        DB::statement(
+            'CREATE TRIGGER `USER_REF_BEFORE_INSERT` BEFORE INSERT ON `users` FOR EACH ROW
+            BEGIN
+                SET NEW.ref = UUID();
+            END'
+        );
     }
 
     /**
@@ -30,6 +39,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('credentials');
+        Schema::dropIfExists('users');
+
+        //Trigger
+        DB::statement('DROP TRIGGER IF EXISTS `USER_REF_BEFORE_INSERT`');
     }
 };

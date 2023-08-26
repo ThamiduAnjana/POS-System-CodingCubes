@@ -23,6 +23,14 @@ return new class extends Migration
             $table->dateTime('updated_at')->useCurrent();
             $table->integer('updated_by')->nullable();
         });
+
+        //Trigger
+        DB::statement(
+            'CREATE TRIGGER `PRODUCT_SKU_REF_BEFORE_INSERT` BEFORE INSERT ON `product_skus` FOR EACH ROW
+            BEGIN
+                SET NEW.ref = UUID();
+            END'
+        );
     }
 
     /**
@@ -31,5 +39,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('product_skus');
+
+        //Trigger
+        DB::statement('DROP TRIGGER IF EXISTS `PRODUCT_SKU_REF_BEFORE_INSERT`');
     }
 };

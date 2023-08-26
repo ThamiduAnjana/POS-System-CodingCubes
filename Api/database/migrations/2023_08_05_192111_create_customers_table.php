@@ -23,11 +23,6 @@ return new class extends Migration
             $table->string('passport')->nullable();
             $table->string('driving_license')->nullable();
             $table->date('dob')->nullable();
-            $table->integer('address_id')->nullable();
-            $table->integer('contact_id')->nullable();
-            $table->integer('mail_id')->nullable();
-            $table->integer('image_id')->nullable();
-            $table->integer('doc_id')->nullable();
             $table->float('deposit')->default(0);
             $table->float('points')->default(0);
             $table->float('balance')->default(0);
@@ -37,6 +32,14 @@ return new class extends Migration
             $table->dateTime('updated_at')->useCurrent();
             $table->integer('updated_by')->nullable();
         });
+
+        //Trigger
+        DB::statement(
+            'CREATE TRIGGER `CUSTOMER_REF_BEFORE_INSERT` BEFORE INSERT ON `customers` FOR EACH ROW
+            BEGIN
+                SET NEW.ref = UUID();
+            END'
+        );
     }
 
     /**
@@ -45,5 +48,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('customers');
+
+        //Trigger
+        DB::statement('DROP TRIGGER IF EXISTS `CUSTOMER_REF_BEFORE_INSERT`');
     }
 };

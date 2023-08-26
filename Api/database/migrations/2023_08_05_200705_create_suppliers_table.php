@@ -15,12 +15,6 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->string('ref')->uuid();
             $table->string('name');
-            $table->integer('address_id')->nullable();
-            $table->integer('contact_id')->nullable();
-            $table->integer('mail_id')->nullable();
-            $table->integer('image_id')->nullable();
-            $table->integer('doc_id')->nullable();
-            $table->integer('supplier_rep_id')->nullable();
             $table->float('deposit')->default(0);
             $table->float('balance')->default(0);
             $table->tinyInteger('status')->default(1);
@@ -29,6 +23,14 @@ return new class extends Migration
             $table->dateTime('updated_at')->useCurrent();
             $table->integer('updated_by')->nullable();
         });
+
+        //Trigger
+        DB::statement(
+            'CREATE TRIGGER `SUPPLIER_REF_BEFORE_INSERT` BEFORE INSERT ON `suppliers` FOR EACH ROW
+            BEGIN
+                SET NEW.ref = UUID();
+            END'
+        );
     }
 
     /**
@@ -37,5 +39,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('suppliers');
+
+        //Trigger
+        DB::statement('DROP TRIGGER IF EXISTS `SUPPLIER_REF_BEFORE_INSERT`');
     }
 };

@@ -23,11 +23,6 @@ return new class extends Migration
             $table->string('passport')->nullable();
             $table->string('driving_license')->nullable();
             $table->date('dob')->nullable();
-            $table->integer('address_id')->nullable();
-            $table->integer('contact_id')->nullable();
-            $table->integer('mail_id')->nullable();
-            $table->integer('image_id')->nullable();
-            $table->integer('doc_id')->nullable();
             $table->float('basic_salary')->nullable();
             $table->float('fixed_allowance')->nullable();
             $table->float('food_allowance')->nullable();
@@ -41,13 +36,21 @@ return new class extends Migration
             $table->integer('salary_type_id')->nullable();
             $table->integer('emp_type_id')->nullable();
             $table->integer('department_id')->nullable();
-            $table->integer('credential_id')->nullable();
+            $table->integer('user_id')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->dateTime('updated_at')->useCurrent();
             $table->integer('updated_by')->nullable();
         });
+
+        //Trigger
+        DB::statement(
+            'CREATE TRIGGER `EMPLOYEE_REF_BEFORE_INSERT` BEFORE INSERT ON `employees` FOR EACH ROW
+            BEGIN
+                SET NEW.ref = UUID();
+            END'
+        );
     }
 
     /**
@@ -56,5 +59,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('employees');
+
+        //Trigger
+        DB::statement('DROP TRIGGER IF EXISTS `EMPLOYEE_REF_BEFORE_INSERT`');
     }
 };

@@ -20,6 +20,14 @@ return new class extends Migration
             $table->dateTime('at')->useCurrent();
             $table->tinyInteger('status')->default(1);
         });
+
+        //Trigger
+        DB::statement(
+            'CREATE TRIGGER `SYSTEM_ENTRY_REF_BEFORE_INSERT` BEFORE INSERT ON `system_entries` FOR EACH ROW
+            BEGIN
+                SET NEW.ref = UUID();
+            END'
+        );
     }
 
     /**
@@ -28,5 +36,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('system_entries');
+
+        //Trigger
+        DB::statement('DROP TRIGGER IF EXISTS `SYSTEM_ENTRY_REF_BEFORE_INSERT`');
     }
 };

@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Services;
 
-use Illuminate\Routing\Controller as BaseController;
-
-class Controller extends BaseController
+class HttpResponseService
 {
     public function successReturn($data, $message = 'Data Return Successfully', $status = 200): \Illuminate\Http\JsonResponse
     {

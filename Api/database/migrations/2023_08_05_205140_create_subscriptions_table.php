@@ -23,6 +23,14 @@ return new class extends Migration
             $table->dateTime('updated_at')->useCurrent();
             $table->integer('updated_by')->nullable();
         });
+
+        //Trigger
+        DB::statement(
+            'CREATE TRIGGER `SUBSCRIPTION_REF_BEFORE_INSERT` BEFORE INSERT ON `subscriptions` FOR EACH ROW
+            BEGIN
+                SET NEW.ref = UUID();
+            END'
+        );
     }
 
     /**
@@ -31,5 +39,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('subscriptions');
+
+        //Trigger
+        DB::statement('DROP TRIGGER IF EXISTS `SUBSCRIPTION_REF_BEFORE_INSERT`');
     }
 };

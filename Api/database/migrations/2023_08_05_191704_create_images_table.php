@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('ref')->uuid();
+            $table->tinyInteger('who_is')->default(5)->comment('0=employee, 1=customer, 2=supplier, 3=supplier_rep, 4=product, 5=other');
+            $table->integer('who_id');
             $table->string('name')->nullable();
             $table->string('url')->nullable();
             $table->string('type')->nullable();
@@ -23,6 +25,14 @@ return new class extends Migration
             $table->dateTime('updated_at')->useCurrent();
             $table->integer('updated_by')->nullable();
         });
+
+        //Trigger
+        DB::statement(
+            'CREATE TRIGGER `IMAGE_REF_BEFORE_INSERT` BEFORE INSERT ON `images` FOR EACH ROW
+            BEGIN
+                SET NEW.ref = UUID();
+            END'
+        );
     }
 
     /**
@@ -31,5 +41,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('images');
+
+        //Trigger
+        DB::statement('DROP TRIGGER IF EXISTS `IMAGE_REF_BEFORE_INSERT`');
     }
 };

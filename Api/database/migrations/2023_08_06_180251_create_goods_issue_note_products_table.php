@@ -28,6 +28,14 @@ return new class extends Migration
             $table->dateTime('updated_at')->useCurrent();
             $table->integer('updated_by')->nullable();
         });
+
+        //Trigger
+        DB::statement(
+            'CREATE TRIGGER `GIN_PRODUCT_REF_BEFORE_INSERT` BEFORE INSERT ON `goods_issue_note_products` FOR EACH ROW
+            BEGIN
+                SET NEW.ref = UUID();
+            END'
+        );
     }
 
     /**
@@ -36,5 +44,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('goods_issue_note_products');
+
+        //Trigger
+        DB::statement('DROP TRIGGER IF EXISTS `GIN_PRODUCT_REF_BEFORE_INSERT`');
     }
 };
