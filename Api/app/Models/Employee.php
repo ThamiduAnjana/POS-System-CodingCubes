@@ -12,6 +12,12 @@ class Employee extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
+    public function saveEmployee(array $data)
+    {
+        return DB::table('employees')
+            ->insertGetId($data);
+    }
+
     public static function getUser(mixed $data)
     {
         return DB::table('employees')

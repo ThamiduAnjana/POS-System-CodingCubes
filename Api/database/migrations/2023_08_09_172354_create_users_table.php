@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('credentials', function (Blueprint $table) {
             $table->id();
             $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('username')->nullable();
             $table->string('password')->nullable();
             $table->string('validation_code')->nullable();
             $table->dateTime('validation_at')->nullable();
