@@ -25,14 +25,6 @@ return new class extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('updated_by')->nullable();
         });
-
-        //Trigger
-        DB::statement(
-            'CREATE TRIGGER `DEVICE_REF_BEFORE_INSERT` BEFORE INSERT ON `devices` FOR EACH ROW
-            BEGIN
-                SET NEW.ref = UUID();
-            END'
-        );
     }
 
     /**
@@ -41,8 +33,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('devices');
-
-        //Trigger
-        DB::statement('DROP TRIGGER IF EXISTS `DEVICE_REF_BEFORE_INSERT`');
     }
 };

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -12,18 +11,37 @@ class Employee extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
+    public function getEmployee()
+    {
+        return DB::table('employees')
+            ->get();
+    }
+
+    public function getEmployeeByWhere(array $filters)
+    {
+        return DB::table('employees')
+            ->where($filters)
+            ->first();
+    }
+
     public function saveEmployee(array $data)
     {
         return DB::table('employees')
             ->insertGetId($data);
     }
 
-    public static function getUser(mixed $data)
+    public function updateEmployee(array $data, array $filters)
     {
         return DB::table('employees')
-            ->select('users.*')
-            ->where('users.id', '=', $data)
-            ->first();
+            ->where($filters)
+            ->update($data);
+    }
+
+    public function deleteEmployee(array $filters)
+    {
+        return DB::table('employees')
+            ->where($filters)
+            ->delete();
     }
 
     /**

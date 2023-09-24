@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Settings;
-use App\Models\User;
 use App\Services\AddressService;
 use App\Services\ContactService;
 use App\Services\DocumentService;
@@ -23,7 +22,6 @@ class EmployeeController extends Controller
 
     private $date;
 
-    private $userModel;
     private $employeeModel;
     private $settingsModel;
 
@@ -38,7 +36,6 @@ class EmployeeController extends Controller
     {
         $this->employeeModel = new Employee();
         $this->settingsModel = new Settings();
-        $this->userModel = new User();
 
         $this->addressService = new AddressService();
         $this->contactService = new ContactService();
@@ -50,41 +47,10 @@ class EmployeeController extends Controller
         $this->date = date('Y-m-d H:i:s');
     }
 
-    public function saveUser(Request $request)
-    {
-        $user_id = null;
-
-        if ($request['ref']){
-            $patch_data = array(
-                'username' => $request['username'],
-                'password' => Hash::make($request['password']),
-                'status' => $request['status'],
-                'updated_at' => $this->date,
-                'updated_by' => Auth::user()->id,
-            );
-            $user_id = $this->userModel->updateUser($patch_data);
-        }else{
-            $patch_data = array(
-                'username' => $request['username'],
-                'password' => Hash::make($request['password']),
-                'status' => 1,
-                'created_at' => $this->date,
-                'created_by' => Auth::user()->id,
-            );
-            $user_id = $this->userModel->saveUser($patch_data);
-        }
-
-        return $user_id;
-    }
-
     public function saveEmployee(Request $request)
     {
-        $credential = $request['credential'];
-        $user_id = null;
-
-        //Save & Update Employee Credentials
-        if($credential){
-            $user_id = $this->saveCredential($credential);
+        if($request->all()){
+            return HttpResponseService::error([],'Registration Failed',Response::HTTP_BAD_REQUEST);
         }
 
         $employee = array(
@@ -110,7 +76,8 @@ class EmployeeController extends Controller
             'salary_type_id' => $request['salary_type_id'],
             'emp_type_id' => $request['emp_type_id'],
             'department_id' => $request['department_id'],
-            'user_id' => $user_id,
+            'username' => $request['username'],
+            'password' => Hash::make($request['password']),
         );
 
         $addresses = $request['addresses'];
@@ -123,13 +90,13 @@ class EmployeeController extends Controller
             $employee['updated_at'] = $this->date;
             $employee['updated_by'] = Auth::user()->id;
 
-            $employee_id = $this->employeeModel->updateEmployee($employee);
+            $employee_id = $this->employeeModel->updateEmployee($employee,array('ref' => $request['ref']));
 
             //Save Image
             if($request->has('image')){
                 $data = array(
-                    'who_is' => $employee_id,
-                    'who_id' => 0, //0 for employee
+                    'owner_type' => 1, //1 for employee
+                    'owner_id' => $employee_id,
                     'image' => $request->file('image'),
                     'folder' => 'employees',
                 );
@@ -139,8 +106,8 @@ class EmployeeController extends Controller
             if($addresses){
                 foreach ($addresses as $address){
                     $data = array(
-                        'who_is' => 0, //0 for employee
-                        'who_id' => $employee_id,
+                        'owner_type' => 1, //1 for employee
+                        'owner_id' => $employee_id,
                         'address' => $address,
                     );
                     $address_id = $this->addressService->saveAddress($data);
@@ -150,8 +117,8 @@ class EmployeeController extends Controller
             if($contacts){
                 foreach ($contacts as $contact){
                     $data = array(
-                        'who_is' => 0, //0 for employee
-                        'who_id' => $employee_id,
+                        'owner_type' => 1, //1 for employee
+                        'owner_id' => $employee_id,
                         'contact' => $contact,
                     );
                     $contact_id = $this->contactService->saveContact($data);
@@ -161,8 +128,8 @@ class EmployeeController extends Controller
             if($mails){
                 foreach ($mails as $mail){
                     $data = array(
-                        'who_is' => 0, //0 for employee
-                        'who_id' => $employee_id,
+                        'owner_type' => 1, //1 for employee
+                        'owner_id' => $employee_id,
                         'mail' => $mail,
                     );
                     $mail_id = $this->mailService->saveMail($data);
@@ -180,8 +147,8 @@ class EmployeeController extends Controller
             //Save Image
             if($request->has('image')){
                 $data = array(
-                    'who_is' => $employee_id,
-                    'who_id' => 0, //0 for employee
+                    'owner_type' => $employee_id,
+                    'owner_id' => 1, //1 for employee
                     'image' => $request->file('image'),
                     'folder' => 'employees',
                 );
@@ -191,8 +158,8 @@ class EmployeeController extends Controller
             if($addresses){
                 foreach ($addresses as $address){
                     $data = array(
-                        'who_is' => 0, //0 for employee
-                        'who_id' => $employee_id,
+                        'owner_type' => 1, //1 for employee
+                        'owner_id' => $employee_id,
                         'address' => $address,
                     );
                     $address_id = $this->addressService->saveAddress($data);
@@ -202,8 +169,8 @@ class EmployeeController extends Controller
             if($contacts){
                 foreach ($contacts as $contact){
                     $data = array(
-                        'who_is' => 0, //0 for employee
-                        'who_id' => $employee_id,
+                        'owner_type' => 1, //1 for employee
+                        'owner_id' => $employee_id,
                         'contact' => $contact,
                     );
                     $contact_id = $this->contactService->saveContact($data);
@@ -213,8 +180,8 @@ class EmployeeController extends Controller
             if($mails){
                 foreach ($mails as $mail){
                     $data = array(
-                        'who_is' => 0, //0 for employee
-                        'who_id' => $employee_id,
+                        'owner_type' => 1, //1 for employee
+                        'owner_id' => $employee_id,
                         'mail' => $mail,
                     );
                     $mail_id = $this->mailService->saveMail($data);
@@ -222,22 +189,42 @@ class EmployeeController extends Controller
             }
             return HttpResponseService::success([],'Employee Saved Successfully');
         }
-        return HttpResponseService::error([],'Registration Failed',102);
+        return HttpResponseService::error([],'Registration Failed',Response::HTTP_PRECONDITION_FAILED);
     }
 
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required',
+        $credential = Validator::make($request->only(['username', 'password']), [
+            'username' => 'required',
             'password' => 'required|string',
         ]);
-        if ($validator->fails()) {
-            return Controller::error($validator->errors(), 'Unprocessable Entity!',Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        if ($credential->fails()) {
+            return HttpResponseService::error($credential->errors(), 'Unprocessable Entity!',Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-        if (!$token = Auth::attempt($validator->validated())) {
-            return Controller::error([], 'Unauthorized!',Response::HTTP_UNAUTHORIZED);
+
+        $employee = $this->employeeModel->getEmployeeByWhere(['username' => $request['username'],'status' => 1]);
+
+        if($employee){
+            if (!$token = Auth::attempt($credential->validated())) {
+                return HttpResponseService::error([], 'Unauthorized!',Response::HTTP_UNAUTHORIZED);
+            }
+            return $this->respondWithToken($token);
         }
-        return $this->respondWithToken($token);
+        return HttpResponseService::error([], 'Your account is deactivated!',Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function handleEmployeeDetailsWhenLogin($data)
+    {
+        return array([
+            'id' => $data['id'],
+            'full_name' => $data['title'].' '.$data['initials'].' '.$data['first_name'].' '.$data['middle_name'].' '.$data['last_name'],
+            'title' => $data['title'],
+            'initials' => $data['initials'],
+            'first_name' => $data['first_name'],
+            'middle_name' => $data['middle_name'],
+            'last_name' => $data['last_name'],
+        ]);
     }
 
     protected function respondWithToken($token)
@@ -247,17 +234,33 @@ class EmployeeController extends Controller
             'status' => 1
         ];
 
-        $settings = $this->settingsModel->getSettingsByWhere($filters);
-        $system_settings = $this->settingsService->handleSettings((array)$settings);
+//        $settings = $this->settingsModel->getSettingsByWhere($filters);
+//        $system_settings = $this->settingsService->handleSettings((array)$settings);
 
-        return  Controller::success([
+
+        return  HttpResponseService::success([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60,
-            'user' => $this->employeeModel->getUser(['id' => Auth::user()->id]),
-            'settings' => $system_settings
+            'user' => $this->handleEmployeeDetailsWhenLogin(Auth::user()),
+            'settings' => $system_settings ?? [],
         ], 'Login successfully!', Response::HTTP_OK);
     }
 
+    public function logout()
+    {
+        Auth::logout();
+        return HttpResponseService::success([],'Successfully logged out');
+    }
+
+    public function me()
+    {
+        return HttpResponseService::success([],'User Details',Auth::user());
+    }
+
+    public function refresh()
+    {
+        return $this->respondWithToken(Auth::refresh());
+    }
 
 }

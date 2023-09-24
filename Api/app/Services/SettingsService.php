@@ -2,8 +2,6 @@
 
 namespace  App\Services;
 
-use Symfony\Component\HttpFoundation\Response;
-
 class SettingsService
 {
     public function handleSettings(array $settings)
