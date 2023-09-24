@@ -25,10 +25,16 @@ import { ChartModule } from './chart/chart.module';
 import { PagesRoutingModule } from './pages-routing.module';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { HelpsComponent } from './helps/helps.component';
+import { IssuesComponent } from './issues/issues.component';
+import { NewFeaturesComponent } from './new-features/new-features.component';
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+    HelpsComponent,
+    IssuesComponent,
+    NewFeaturesComponent
   ],
   imports: [
     CommonModule,

@@ -1,1 +1,112 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+  font-size: 12px !important;
+}
+//when dark mode
+body[data-layout-mode='dark']{
+  select {
+    background-color: #313533;
+    color: #e9ece4;
+  }
+  .ng-custom .ng-select.ng-select-single .ng-select-container {
+    background-color: #373c39 !important;
+    border: none !important;
+  }
+  .ng-custom .ng-select.ng-select-single .ng-select-container {
+    color: #a4acb3 !important;
+    box-shadow: none !important;
+  }
+  .ng-dropdown-panel{
+    border: none !important;
+  }
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    background-color: #373c39 !important;
+    color: #c9cfd5 !important;
+  }
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+    background-color: #838383 !important;
+    color: white !important;
+  }
+  .ng-select .ng-select-container .ng-value-container .ng-input>input {
+    color: #ced4da !important;
+  }
+}
+.pagination-rounded .page-link {
+  width: 25px !important;
+  height: 25px !important;
+  line-height: 25px !important;
+}
+
+table tbody tr td {
+  padding: 8px !important;
+}
+
+.modal-backdrop{
+  z-index: 1100 !important;
+}
+.modal{
+  z-index: 1101 !important;
+}
+.modal-header {
+  padding: 10px 15px 10px 15px !important;
+}
+.modal-footer {
+  padding: 10px 15px 10px 15px !important;
+}
+.alert .close {
+  display: none;
+}
+
+//body[loading = 'true']{
+//
+//  :not(.btn-check) + .btn:hover, .btn:first-child:hover{
+//    background-color: #fff !important;
+//  }
+//  .placeholder {
+//    display: inline-block;
+//    min-height: 1em;
+//    vertical-align: middle;
+//    cursor: wait;
+//    background-color: currentcolor;
+//    opacity: .5;
+//  }
+//
+//  // Sizing
+//  .placeholder-xs {
+//    min-height: .6em;
+//  }
+//
+//  .placeholder-sm {
+//    min-height: .8em;
+//  }
+//
+//  .placeholder-lg {
+//    min-height: 1.2em;
+//  }
+//
+//  // Animation
+//  .placeholder-glow {
+//    .placeholder {
+//      animation: placeholder-glow 2s ease-in-out infinite;
+//    }
+//  }
+//
+//  @keyframes placeholder-glow {
+//    50% {
+//      opacity: .2;
+//    }
+//  }
+//
+//  .placeholder-wave {
+//    mask-image: linear-gradient(130deg, #000 55%, rgba(0, 0, 0, (1 - .2)) 75%, #000 95%);
+//    mask-size: 200% 100%;
+//    animation: placeholder-wave 2s linear infinite;
+//  }
+//
+//  @keyframes placeholder-wave {
+//    100% {
+//      mask-position: -200% 0%;
+//    }
+//  }
+//
+//}

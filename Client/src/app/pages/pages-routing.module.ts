@@ -2,11 +2,35 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {HelpsComponent} from "./helps/helps.component";
+import {IssuesComponent} from "./issues/issues.component";
+import {NewFeaturesComponent} from "./new-features/new-features.component";
 
 const routes: Routes = [
   {
     path: '',
     component: DashboardComponent
+  },
+  {
+    path: 'catalogs', loadChildren: () => import('./catalog/catalog.module').then(m => m.CatalogModule)
+  },
+  {
+    path: 'contacts', loadChildren: () => import('./contacts/contacts.module').then(m => m.ContactsModule)
+  },
+  {
+    path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule)
+  },
+  {
+    path: 'help',
+    component: HelpsComponent
+  },
+  {
+    path: 'issues',
+    component: IssuesComponent
+  },
+  {
+    path: 'new-features',
+    component: NewFeaturesComponent
   },
   {
     path: 'apps', loadChildren: () => import('./apps/apps.module').then(m => m.AppsModule)

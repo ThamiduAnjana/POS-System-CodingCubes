@@ -80,7 +80,7 @@
         "BRAND": "Brand"
       }
     }
-  }, 
+  },
   "MENUITEMS": {
     "MENU": {
       "TEXT": "Menu"
@@ -238,6 +238,6 @@
           }
         }
       }
-    }        
+    }
   }
 }

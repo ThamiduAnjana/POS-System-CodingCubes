@@ -1,0 +1,205 @@
+<!-- start page title -->
+<app-pagetitle title="Products" [breadcrumbItems]="breadCrumbItems"></app-pagetitle>
+<!-- end page title -->
+
+<!-- start top menu row -->
+<div class="row align-items-center">
+  <div class="col-md-6">
+    <div class="row mb-2 align-items-center">
+      <!-- Page Size -->
+      <label class="col-sm-1 col-form-label">Show</label>
+      <div class="col-sm-2 ng-custom">
+        <ng-select name="pageSize" [(ngModel)]="pageSize" inputmode="false">
+          <ng-option *ngFor="let page_size of pageSizes" [value]="page_size">{{page_size}}</ng-option>
+        </ng-select>
+      </div>
+      <label class="col-sm-1 col-form-label">Entries</label>
+      <!-- End Page Size -->
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
+      <div>
+        <button class="btn btn-primary btn-sm" (click)="openModel(productsModel,'products-model',{size: 'xl', windowClass: 'modal-holder', centered: false})"><i class="bx bx-plus me-1"></i> Add New</button>
+      </div>
+      <div>
+        <button class="btn btn-outline-info btn-sm"><i class="bx bx bx-info-circle"></i></button>
+      </div>
+      <div>
+        <button class="btn btn-outline-warning btn-sm"><i class="bx bx bx-cog"></i></button>
+      </div>
+      <div class="dropdown" ngbDropdown container="body">
+        <a class="btn btn-link text-muted py-1 font-size-16 shadow-none dropdown-toggle"
+           href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+          <i class="bx bx-dots-horizontal-rounded"></i>
+        </a>
+
+        <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+          <li><a class="dropdown-item" href="javascript:void(0);"><i class="bx bxs-file-blank"></i> Import Template</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);"><i class="bx bxs-file-doc"></i> Import Products</a></li>
+          <li><small class="menu-title">Reports</small></li>
+          <li><a class="dropdown-item" href="javascript:void(0);"><i class="bx bxs-report"></i> Products</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);"><i class="bx bxs-report"></i> Trending Products</a></li>
+          <li><a class="dropdown-item" href="javascript:void(0);"><i class="bx bxs-report"></i> Expiration Products</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end top menu row -->
+
+<!-- start content row -->
+<div class="row">
+  <div class="col-sm-12">
+    <div class="row">
+      <!-- Search -->
+      <form (ngSubmit)="getProducts()" [formGroup]="filterForm" class="d-flex">
+        <div class="col-sm-5">
+          <input type="text" class="form-control form-control-sm" placeholder="keyword....." formControlName="keyword">
+        </div>
+        <div class="col-sm-2 ng-custom ms-2">
+          <ng-select name="pageSize" formControlName="status">
+            <ng-option [value]="1">Active</ng-option>
+            <ng-option [value]="0">Deactivate</ng-option>
+          </ng-select>
+        </div>
+        <div class="col-sm-1">
+          <button class="btn btn-primary btn-sm ms-2" type="button"><i class="bx bx-search-alt align-middle"></i></button>
+        </div>
+      </form>
+      <!-- End search -->
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive placeholder-glow mt-1">
+      <table class="table align-middle dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+        <thead>
+        <tr class="bg-transparent">
+          <th>Name</th>
+          <th>Short Code</th>
+          <th>Rack</th>
+          <th>Category</th>
+          <th>Unit</th>
+          <th>Brand</th>
+          <th>Color</th>
+          <th>QTY</th>
+          <th class="text-end">Cost</th>
+          <th class="text-end">Price</th>
+          <th class="text-center">Status</th>
+          <th class="text-end">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let product of productList;let key = index;">
+          <td>
+            <img src="assets/images/default.jpg" class="rounded-1 avatar-sm" alt="">
+            <!--            <img src="assets/images/default.jpg" class="rounded-1 avatar-sm" alt="">-->
+          </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td class="text-end"> </td>
+          <td class="text-end"> </td>
+          <td class="text-center">
+            <span class="badge badge-soft-success font-size-12">Active</span>
+            <!--            <span class="badge badge-soft-warning font-size-12">Deactivated</span>-->
+          </td>
+          <td class="text-end">
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-warning btn-sm"><i class="bx bx-tag-alt"></i></button>
+              <button type="button" class="btn btn-primary btn-sm"><i class="bx bx-show-alt"></i></button>
+              <button type="button" class="btn btn-success btn-sm"><i class="bx bx-edit-alt"></i></button>
+              <button type="button" class="btn btn-danger btn-sm"><i class="bx bx-trash-alt"></i></button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="productList.length < 1">
+          <td colspan="12">No Recodes</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- End table -->
+    <div class="row justify-content-md-between align-items-md-center mt-2">
+      <div class="col-sm-12 col-md-5">
+        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+          Showing
+          1
+          to
+          10
+          of
+          {{totalRecords}}
+          entries
+        </div>
+      </div>
+      <!-- Pagination -->
+      <div class="col-sm-12 col-md-5">
+        <div class="text-md-right float-md-end pagination-rounded">
+          <ngb-pagination size="sm" [collectionSize]="totalRecords" [(page)]="page" [pageSize]="pageSize">
+          </ngb-pagination>
+        </div>
+      </div>
+      <!-- End Pagination -->
+    </div>
+  </div>
+</div>
+<!-- end content row -->
+
+<!-- Product Modal Add & Edit -->
+
+<ng-template #productsModel role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title mt-0">{{isEdit ? 'Edit Existing': 'Add New'}} Products</h5>
+    <button type="button" class="btn-close btn-sm" aria-hidden="true" (click)="closeModal('products-model')"></button>
+  </div>
+  <div class="modal-body">
+    <!-- Alert -->
+    <div *ngIf="isInvalid">
+      <ngb-alert type="danger" [dismissible]="false" class="alert alert-dismissible alert-label-icon label-arrow fade">
+        <i class="mdi mdi-block-helper label-icon"></i>
+        <strong>Error</strong> - Fill the required fields!
+      </ngb-alert>
+    </div>
+    <!-- End Alert -->
+    <h5>Overflowing text to show scroll behavior</h5>
+    <p>Cras mattis consectetur purus sit amet fermentum.
+      Cras justo odio, dapibus ac facilisis in,
+      egestas eget quam. Morbi leo risus, porta ac
+      consectetur ac, vestibulum at eros.</p>
+    <p>Praesent commodo cursus magna, vel scelerisque
+      nisl consectetur et. Vivamus sagittis lacus vel
+      augue laoreet rutrum faucibus dolor auctor.</p>
+    <p>Aenean lacinia bibendum nulla sed consectetur.
+      Praesent commodo cursus magna, vel scelerisque
+      nisl consectetur et. Donec sed odio dui. Donec
+      ullamcorper nulla non metus auctor
+      fringilla.</p>
+    <p>Cras mattis consectetur purus sit amet fermentum.
+      Cras justo odio, dapibus ac facilisis in,
+      egestas eget quam. Morbi leo risus, porta ac
+      consectetur ac, vestibulum at eros.</p>
+    <p>Praesent commodo cursus magna, vel scelerisque
+      nisl consectetur et. Vivamus sagittis lacus vel
+      augue laoreet rutrum faucibus dolor auctor.</p>
+    <p>Aenean lacinia bibendum nulla sed consectetur.
+      Praesent commodo cursus magna, vel scelerisque
+      nisl consectetur et. Donec sed odio dui. Donec
+      ullamcorper nulla non metus auctor
+      fringilla.</p>
+    <p>Cras mattis consectetur purus sit amet fermentum.
+      Cras justo odio, dapibus ac facilisis in,
+      egestas eget quam. Morbi leo risus, porta ac
+      consectetur ac, vestibulum at eros.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light btn-sm" (click)="closeModal('products-model')">Close</button>
+    <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+  </div>
+</ng-template>
+
+<!-- End Product Modal Add & Edit -->

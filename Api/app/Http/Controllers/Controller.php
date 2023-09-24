@@ -3,24 +3,32 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
+use Symfony\Component\HttpFoundation\Response;
 
 class Controller extends BaseController
 {
-    public function successReturn($data, $message = 'Data Return Successfully', $status = 200): \Illuminate\Http\JsonResponse
+    public static function success($data, $message= 'Successful!', $status_code =  Response::HTTP_OK)
     {
-        return response()->json([
-            'data' => $data,
-            'message' => $message,
-            'status' => $status
-        ]);
+        return response()->json(
+            [
+                'data' => $data,
+                'message' => $message,
+                'status' => $status_code
+            ],
+            $status_code
+        );
     }
 
-    public function errorReturn($data, $message = 'Data Return Unsuccessfully', $status = 401): \Illuminate\Http\JsonResponse
+
+    public static function error($data, $message = 'Unsuccessful!', $status_code =  Response::HTTP_BAD_REQUEST)
     {
-        return response()->json([
-            'data' => $data,
-            'message' => $message,
-            'status' => $status
-        ]);
+        return response()->json(
+            [
+                'data' => $data,
+                'message' => $message,
+                'status' => $status_code
+            ],
+            $status_code
+        );
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
-use App\Models\Setting;
 use App\Models\Settings;
 use App\Models\User;
 use App\Services\AddressService;
@@ -12,24 +11,28 @@ use App\Services\DocumentService;
 use App\Services\HttpResponseService;
 use App\Services\ImageService;
 use App\Services\MailService;
+use App\Services\SettingsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class EmployeeController extends Controller
 {
 
-    public $date;
+    private $date;
 
-    public $userModel;
-    public $employeeModel;
-    public $settingsModel;
+    private $userModel;
+    private $employeeModel;
+    private $settingsModel;
 
-    public $addressService;
-    public $contactService;
-    public $mailService;
-    public $imageService;
-    public $documentService;
+    private $addressService;
+    private $contactService;
+    private $mailService;
+    private $imageService;
+    private $documentService;
+    private $settingsService;
 
     public function __construct()
     {
@@ -42,6 +45,7 @@ class EmployeeController extends Controller
         $this->mailService = new MailService();
         $this->imageService = new ImageService();
         $this->documentService = new DocumentService();
+        $this->settingsService = new SettingsService();
 
         $this->date = date('Y-m-d H:i:s');
     }
@@ -164,7 +168,7 @@ class EmployeeController extends Controller
                     $mail_id = $this->mailService->saveMail($data);
                 }
             }
-            return HttpResponseService::successReturn([],'Employee Updated Successfully');
+            return HttpResponseService::success([],'Employee Updated Successfully');
         }else{
 
             $employee['status'] = 1;
@@ -216,9 +220,43 @@ class EmployeeController extends Controller
                     $mail_id = $this->mailService->saveMail($data);
                 }
             }
-            return HttpResponseService::successReturn([],'Employee Saved Successfully');
+            return HttpResponseService::success([],'Employee Saved Successfully');
         }
-        return HttpResponseService::errorReturn([],'Registration Failed',102);
+        return HttpResponseService::error([],'Registration Failed',102);
+    }
+
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return Controller::error($validator->errors(), 'Unprocessable Entity!',Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        if (!$token = Auth::attempt($validator->validated())) {
+            return Controller::error([], 'Unauthorized!',Response::HTTP_UNAUTHORIZED);
+        }
+        return $this->respondWithToken($token);
+    }
+
+    protected function respondWithToken($token)
+    {
+        $filters = [
+            'resource_id' => 1,
+            'status' => 1
+        ];
+
+        $settings = $this->settingsModel->getSettingsByWhere($filters);
+        $system_settings = $this->settingsService->handleSettings((array)$settings);
+
+        return  Controller::success([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'user' => $this->employeeModel->getUser(['id' => Auth::user()->id]),
+            'settings' => $system_settings
+        ], 'Login successfully!', Response::HTTP_OK);
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,11 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group([
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('login', [EmployeeController::class, 'login']);
+});
 
-
-Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
-    Route::post('login', [AuthController::class,'login']);
-    Route::post('logout', [AuthController::class,'logout']);
-    Route::post('refresh', [AuthController::class,'refresh']);
-    Route::post('me', [AuthController::class,'me']);
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('logout', [EmployeeController::class, 'logout']);
+    Route::post('refresh', [EmployeeController::class, 'refresh']);
+    Route::post('me', [EmployeeController::class, 'me']);
 });
