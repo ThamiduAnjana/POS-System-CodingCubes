@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -14,8 +15,7 @@ return new class extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
             $table->string('ref')->unique()->default(DB::raw('(UUID())'));
-            $table->dateTime('date_time')->useCurrent();
-            $table->integer('customer_id')->nullable();
+            $table->integer('supplier_id')->nullable();
             $table->integer('return_invoice_id')->nullable();
 
             $table->decimal('sub_total')->nullable();

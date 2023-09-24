@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('ref')->unique()->default(DB::raw('(UUID())'));
             $table->string('name');
             $table->integer('payment_term')->nullable();
+            $table->tinyInteger('payment_term_type')->nullable()->comment('month = 1, day = 2');
+            $table->float('credit_limit')->nullable()->comment('keep null for no credit limit');
             $table->float('deposit')->default(0);
             $table->float('balance')->default(0);
             $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');

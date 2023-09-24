@@ -23,14 +23,6 @@ return new class extends Migration
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('updated_by')->nullable();
         });
-
-        //Trigger
-        DB::statement(
-            'CREATE TRIGGER `BRAND_REF_BEFORE_INSERT` BEFORE INSERT ON `brands` FOR EACH ROW
-            BEGIN
-                SET NEW.ref = UUID();
-            END'
-        );
     }
 
     /**
@@ -39,8 +31,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('brands');
-
-        //Trigger
-        DB::statement('DROP TRIGGER IF EXISTS `BRAND_REF_BEFORE_INSERT`');
     }
 };

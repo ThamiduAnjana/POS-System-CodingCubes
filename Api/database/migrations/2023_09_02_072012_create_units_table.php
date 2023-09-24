@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('short_name')->nullable();
             $table->tinyInteger('is_decimal')->default(0)->comment('0 = false,1 = true');
-            $table->decimal('value')->nullable();
             $table->integer('child_id')->nullable();
+            $table->decimal('value')->nullable();
             $table->string('description')->nullable();
             $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
             $table->dateTime('created_at')->useCurrent();

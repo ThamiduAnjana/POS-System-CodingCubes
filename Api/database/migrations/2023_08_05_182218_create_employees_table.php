@@ -28,7 +28,7 @@ return new class extends Migration
             $table->float('discount_rate')->nullable()->comment('discount limit');
             $table->float('commission_rate')->nullable();
             $table->float('basic_salary')->nullable();
-            $table->integer('allowance_id')->nullable();
+            $table->longText('allowances')->nullable()->comment('json = [id, amount]');
             $table->float('ot_rate')->nullable();
             $table->float('insurance')->nullable();
             $table->float('epf_rate')->nullable();
@@ -37,7 +37,10 @@ return new class extends Migration
             $table->integer('salary_type_id')->default(1)->comment('month = 1, day = 2');
             $table->tinyInteger('department_id')->nullable()->comment('management = 1, hr = 2, accounting = 3, production & stork management = 4, sales & marketing = 5' );
             $table->tinyInteger('is_rep')->default(0);
-            $table->integer('credential_id')->nullable();
+            $table->string('username')->nullable();
+            $table->string('password')->nullable();
+            $table->string('validation_code')->nullable();
+            $table->dateTime('validation_at')->nullable();
             $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('ref')->unique()->default(DB::raw('(UUID())'));
             $table->integer('purchase_id')->nullable();
             $table->integer('product_id')->nullable();
+            $table->longText('product_details')->nullable()->comment('product details in json');
             $table->decimal('qty')->nullable();
             $table->decimal('cost')->nullable();
             $table->decimal('price')->nullable();
