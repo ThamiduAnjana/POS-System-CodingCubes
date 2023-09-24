@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -11,16 +12,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_skus', function (Blueprint $table) {
-            $table->id()->autoIncrement();
-            $table->string('ref')->uuid();
+        Schema::create('product_prices', function (Blueprint $table) {
+            $table->id();
+            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
             $table->integer('product_id')->nullable();
-            $table->string('sku')->nullable();
-            $table->string('description')->nullable();
-            $table->tinyInteger('status')->default(1);
+            $table->integer('price_group_id')->nullable();
+            $table->decimal('price')->nullable();
+            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
-            $table->dateTime('updated_at')->useCurrent();
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('updated_by')->nullable();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_skus');
+        Schema::dropIfExists('product_prices');
     }
 };

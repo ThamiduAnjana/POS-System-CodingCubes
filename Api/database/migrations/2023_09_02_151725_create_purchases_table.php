@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,13 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_behaviors', function (Blueprint $table) {
+        Schema::create('purchases', function (Blueprint $table) {
             $table->id();
             $table->string('ref')->unique()->default(DB::raw('(UUID())'));
-            $table->integer('product_id')->nullable();
-            $table->decimal('qty')->nullable();
-            $table->decimal('qty_balance')->nullable();
-            $table->tinyInteger('type')->default(1)->comment('1: sale, 2: sale-return, 3: purchase, 4: purchase-return');
+            $table->dateTime('date_time')->useCurrent();
+            $table->integer('customer_id')->nullable();
+            $table->integer('return_invoice_id')->nullable();
+
+            $table->decimal('sub_total')->nullable();
+            $table->decimal('discount')->nullable();
+            $table->decimal('tax')->nullable();
+            $table->decimal('total')->nullable();
+            $table->decimal('received_amount')->nullable();
+            $table->decimal('balance')->nullable();
+
             $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
@@ -32,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_behaviors');
+        Schema::dropIfExists('purchases');
     }
 };

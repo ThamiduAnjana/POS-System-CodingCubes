@@ -12,13 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_behaviors', function (Blueprint $table) {
+        Schema::create('invoice_products', function (Blueprint $table) {
             $table->id();
             $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->integer('invoice_id')->nullable();
             $table->integer('product_id')->nullable();
             $table->decimal('qty')->nullable();
-            $table->decimal('qty_balance')->nullable();
-            $table->tinyInteger('type')->default(1)->comment('1: sale, 2: sale-return, 3: purchase, 4: purchase-return');
+            $table->decimal('cost')->nullable();
+            $table->decimal('price')->nullable();
+            $table->decimal('discount')->nullable();
+            $table->decimal('tax')->nullable();
+            $table->decimal('total')->nullable();
+            $table->integer('employee_id')->nullable()->comment('sale-rep');
             $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
@@ -32,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_behaviors');
+        Schema::dropIfExists('invoice_products');
     }
 };
