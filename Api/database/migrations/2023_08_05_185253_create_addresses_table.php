@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->integer('owner_type')->nullable()->comment('1 = employee, 2 = customer, 3 = supplier, 4 = supplier representative');
             $table->integer('owner_id')->nullable();
             $table->string('house')->nullable();
             $table->string('street')->nullable();

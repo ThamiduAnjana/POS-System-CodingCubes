@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Image;
 use App\Models\Settings;
+use Illuminate\Support\Facades\Auth;
 
 class ImageService
 {
@@ -42,11 +43,12 @@ class ImageService
         $uploaded_data = $this->uploadImage($data['image'],$data['folder']);
 
         $image = array(
-            'who_is' => $data['who_is'],
-            'who_id' => $data['who_id'],
+            'owner_type' => $data['owner_type'],
+            'owner_id' => $data['owner_id'],
             'name' => $uploaded_data['name'],
             'url' => $uploaded_data['url'],
             'type' => $uploaded_data['type'],
+            'folder' => $data['folder'],
             'status' => 1,
             'created_at' => $this->date,
             'created_by' => Auth::user()->id,

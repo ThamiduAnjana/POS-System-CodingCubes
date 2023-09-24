@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->string('ref')->unique()->default(DB::raw('(UUID())'));
-            $table->dateTime('date_time')->useCurrent();
             $table->integer('customer_id')->nullable();
             $table->integer('return_invoice_id')->nullable();
 

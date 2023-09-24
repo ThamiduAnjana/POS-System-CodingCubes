@@ -14,9 +14,10 @@ class CustomerSeeder extends Seeder
     public function run(): void
     {
         DB::table('customers')->insert([
+            'title' => 'System',
+            'initials' => 'C',
             'first_name' => 'Walk-in',
             'middle_name' => 'Customer',
-            'initials' => 'C',
             'sex' => 1,
             'dob' => '2023-01-01',
             'status' => 1,

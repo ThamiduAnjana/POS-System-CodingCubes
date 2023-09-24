@@ -12,13 +12,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('credentials', function (Blueprint $table) {
+        Schema::create('salary_allowances', function (Blueprint $table) {
             $table->id();
             $table->string('ref')->unique()->default(DB::raw('(UUID())'));
-            $table->string('username')->nullable();
-            $table->string('password')->nullable();
-            $table->string('validation_code')->nullable();
-            $table->dateTime('validation_at')->nullable();
+            $table->string('name')->nullable();
+            $table->string('description')->nullable();
             $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('credentials');
+        Schema::dropIfExists('salary_allowances');
     }
 };

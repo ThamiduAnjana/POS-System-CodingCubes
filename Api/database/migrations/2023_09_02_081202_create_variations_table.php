@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('ref')->unique()->default(DB::raw('(UUID())'));
             $table->string('name')->nullable();
-            $table->string('value')->nullable();
+            $table->string('value')->nullable()->comment('as json');
             $table->string('description')->nullable();
             $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
             $table->dateTime('created_at')->useCurrent();

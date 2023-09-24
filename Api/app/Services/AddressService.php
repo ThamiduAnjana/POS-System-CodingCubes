@@ -37,13 +37,13 @@ class AddressService
                 'updated_by' => Auth::user()->id,
             );
 
-            $this->addressModel->updateAddress($patch_data);
+            $this->addressModel->updateAddress($data['ref'],$patch_data);
             $address_id = $this->addressModel->getAddressByRef($data['ref']);
 
         }else{
             $patch_data = array(
-                'who_is' => $data['who_is'],
-                'who_id' => $data['who_id'],
+                'owner_type' => $data['owner_type'],
+                'owner_id' => $data['owner_id'],
                 'house' => $address['house'],
                 'street' => $address['street'],
                 'village' => $address['village'],

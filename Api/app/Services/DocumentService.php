@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Document;
 use App\Models\Settings;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentService
 {
@@ -42,9 +43,12 @@ class DocumentService
         $uploaded_data = $this->uploadDocument($data['document'],$data['folder']);
 
         $document = array(
+            'owner_type' => $data['owner_type'],
+            'owner_id' => $data['owner_id'],
             'name' => $uploaded_data['name'],
             'url' => $uploaded_data['url'],
             'type' => $uploaded_data['type'],
+            'folder' => $data['folder'],
             'status' => 1,
             'created_at' => $this->date,
             'created_by' => Auth::user()->id,

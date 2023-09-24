@@ -14,12 +14,14 @@ class SupplierRepresentativeSeeder extends Seeder
     public function run(): void
     {
         DB::table('supplier_representatives')->insert([
+            'title' => 'System',
+            'initials' => 'S',
             'first_name' => 'Walk-in',
             'middle_name' => 'Supplier',
             'last_name' => 'Representative',
-            'initials' => 'S',
             'sex' => 1,
             'dob' => '2023-01-01',
+            'supplier_id' => 1,
             'status' => 1,
             'created_at' => now(),
             'created_by' => 1,

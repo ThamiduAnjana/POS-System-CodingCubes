@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Contact;
+use Illuminate\Support\Facades\Auth;
 
 class ContactService
 {
@@ -29,13 +30,13 @@ class ContactService
                 'updated_by' => Auth::user()->id,
             );
 
-            $this->contactModel->updateContact($patch_data);
+            $this->contactModel->updateContact($data['ref'],$patch_data);
             $contact_id = $this->contactModel->getContactByRef($data['ref']);
 
         }else{
             $patch_data = array(
-                'who_is' => $data['who_is'],
-                'who_id' => $data['who_id'],
+                'owner_type' => $data['owner_type'],
+                'owner_id' => $data['owner_id'],
                 'contact' => $contact['contact'],
                 'is_primary' => $contact['is_primary'],
                 'status' => 1,

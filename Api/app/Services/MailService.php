@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Mail;
+use Illuminate\Support\Facades\Auth;
 
 class MailService
 {
@@ -29,13 +30,13 @@ class MailService
                 'updated_by' => Auth::user()->id,
             );
 
-            $this->mailModel->updateMail($patch_data);
+            $this->mailModel->updateMail($data['ref'],$patch_data);
             $mail_id = $this->mailModel->getMailByRef($data['ref']);
 
         }else{
             $patch_data = array(
-                'who_is' => $data['who_is'],
-                'who_id' => $data['who_id'],
+                'owner_type' => $data['owner_type'],
+                'owner_id' => $data['owner_id'],
                 'mail' => $mail['mail'],
                 'is_primary' => $mail['is_primary'],
                 'status' => 1,
