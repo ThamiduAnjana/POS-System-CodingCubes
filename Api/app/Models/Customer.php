@@ -65,7 +65,7 @@ class Customer extends Model
             ->get();
     }
 
-    public static function getCustomerByPage($request)
+    public static function getCustomersByPage($request)
     {
         $page_no = $request['page_no'];
         $page_size = $request['page_size'];
