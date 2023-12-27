@@ -14,12 +14,14 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('category_ref')->unique()->default(DB::raw('(UUID())'));
             $table->string('name')->nullable();
-            $table->string('short_code')->nullable();
-            $table->string('description')->nullable();
             $table->integer('parent_id')->nullable();
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->string('short_code')->nullable();
+            $table->string('full_code')->nullable();
+            $table->string('description')->nullable();
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

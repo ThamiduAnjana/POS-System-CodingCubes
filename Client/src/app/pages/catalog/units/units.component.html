@@ -9,7 +9,7 @@
       <!-- Page Size -->
       <label class="col-sm-1 col-form-label">Show</label>
       <div class="col-sm-2 ng-custom">
-        <ng-select name="pageSize" [(ngModel)]="pageSize" inputmode="false">
+        <ng-select class="close-d-none" name="pageSize" [(ngModel)]="pageSize" inputmode="false">
           <ng-option *ngFor="let page_size of pageSizes" [value]="page_size">{{page_size}}</ng-option>
         </ng-select>
       </div>
@@ -60,8 +60,9 @@
             <ng-option [value]="0">Deactivate</ng-option>
           </ng-select>
         </div>
-        <div class="col-sm-1">
+        <div class="col-sm-1 d-flex">
           <button class="btn btn-primary btn-sm ms-2" type="button"><i class="bx bx-search-alt align-middle"></i></button>
+          <button class="btn btn-secondary btn-sm ms-2" type="button"><i class="bx bx-refresh align-middle"></i></button>
         </div>
       </form>
       <!-- End search -->

@@ -84,6 +84,7 @@ class EmployeeController extends Controller
         $contacts = $request['contacts'];
         $mails = $request['mails'];
 
+        //TODO rename ref for this
         if($request['ref']){
 
             $employee['status'] = $request['status'];
@@ -92,6 +93,7 @@ class EmployeeController extends Controller
 
             $employee_id = $this->employeeModel->updateEmployee($employee,array('ref' => $request['ref']));
 
+            //TODO set media table for this
             //Save Image
             if($request->has('image')){
                 $data = array(
@@ -144,6 +146,7 @@ class EmployeeController extends Controller
 
             $employee_id = $this->employeeModel->saveEmployee($employee);
 
+            //TODO set media table for this
             //Save Image
             if($request->has('image')){
                 $data = array(
@@ -242,7 +245,7 @@ class EmployeeController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60,
-            'user' => $this->handleEmployeeDetailsWhenLogin(Auth::user()),
+            'employee' => $this->handleEmployeeDetailsWhenLogin(Auth::user()),
             'settings' => $system_settings ?? [],
         ], 'Login successfully!', Response::HTTP_OK);
     }

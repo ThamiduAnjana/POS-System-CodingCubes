@@ -10,75 +10,57 @@ class Address extends Model
 {
     use HasFactory;
 
-    public function getAddress()
+    protected $table = 'addresses';
+
+    protected $fillable = [
+        'address_ref',
+        'owner_type',
+        'owner_id',
+        'house',
+        'street',
+        'village',
+        'city',
+        'postal_code',
+        'district',
+        'province',
+        'country',
+        'is_primary',
+        'is_active',
+        'location_id',
+        'created_at',
+        'created_by',
+        'updated_at',
+        'updated_by',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    public static function getAddresses()
     {
-        return DB::table('addresses')
-            ->select('id','ref','who_is','who_id','house','street','village','city','postal_code','district','province','country','status')
+        return Address::select('addresses.id', 'addresses.address_ref', 'addresses.owner_type', 'addresses.owner_id', 'addresses.house', 'addresses.street',
+            'addresses.village', 'addresses.city', 'addresses.postal_code', 'addresses.district', 'addresses.province', 'addresses.country',
+            'addresses.is_primary', 'addresses.is_active', 'addresses.location_id', 'locations.name as location_name', 'addresses.created_at',
+            'addresses.created_by', 'addresses.updated_at', 'addresses.updated_by',
+            DB::raw('(SELECT users.first_name FROM users WHERE users.id = access_policies.created_by) as created_by_name'),
+            DB::raw('(SELECT users.first_name FROM users WHERE users.id = access_policies.updated_by) as updated_by_name'))
+            ->leftJoin('locations', 'locations.id', '=', 'addresses.location_id')
+            ->where('addresses.is_active', 1)
             ->get();
     }
 
-    public function getAddressByRef(string $ref)
+    public static function getAddress(array $filters)
     {
-        return DB::table('addresses')
-            ->select('id','ref','who_is','who_id','house','street','village','city','postal_code','district','province','country','status')
-            ->where('ref',$ref)
+        return Address::select('addresses.id', 'addresses.address_ref', 'addresses.owner_type', 'addresses.owner_id', 'addresses.house', 'addresses.street',
+            'addresses.village', 'addresses.city', 'addresses.postal_code', 'addresses.district', 'addresses.province', 'addresses.country',
+            'addresses.is_primary', 'addresses.is_active', 'addresses.location_id', 'locations.name as location_name', 'addresses.created_at',
+            'addresses.created_by', 'addresses.updated_at', 'addresses.updated_by',
+            DB::raw('(SELECT users.first_name FROM users WHERE users.id = access_policies.created_by) as created_by_name'),
+            DB::raw('(SELECT users.first_name FROM users WHERE users.id = access_policies.updated_by) as updated_by_name'))
+            ->leftJoin('locations', 'locations.id', '=', 'addresses.location_id')
+            ->where($filters)
             ->first();
     }
 
-    public function getAddressByPage(int $start_no,int $page_size,array $filters, bool $is_get_total = false)
-    {
-        $sql = DB::table('addresses')
-            ->select('id','ref','who_is','who_id','house','street','village','city','postal_code','district','province','country','status');
-
-        if($filters['keyword'] != ''){
-            $sql->where(function ($q) use ($filters) {
-                $q->where('house', 'LIKE', '%' . $filters['keyword'] . '%');
-                $q->where('street', 'LIKE', '%' . $filters['keyword'] . '%');
-                $q->where('village', 'LIKE', '%' . $filters['keyword'] . '%');
-                $q->where('city', 'LIKE', '%' . $filters['keyword'] . '%');
-                $q->where('postal_code', 'LIKE', '%' . $filters['keyword'] . '%');
-                $q->where('district', 'LIKE', '%' . $filters['keyword'] . '%');
-                $q->where('province', 'LIKE', '%' . $filters['keyword'] . '%');
-                $q->where('country', 'LIKE', '%' . $filters['keyword'] . '%');
-            });
-        }
-
-        if($filters['status'] === 0){
-            $sql->where('status',0);
-        }else if($filters['status'] === 1){
-            $sql->where('status',1);
-        } else {
-            $sql->whereIn('status',[0,1]);
-        }
-
-        if($is_get_total){
-            return $sql->count();
-        } else {
-            return  $sql->orderBy('id','DESC')
-                ->skip($start_no)
-                ->take($page_size)
-                ->get();
-        }
-    }
-
-    public function getAddressWhere(array $where)
-    {
-        return DB::table('addresses')
-            ->select('id','ref','who_is','who_id','house','street','village','city','postal_code','district','province','country','status')
-            ->where($where)
-            ->get();
-    }
-
-    public function saveAddress(array $data)
-    {
-        return DB::table('addresses')
-            ->insertGetId($data);
-    }
-
-    public function updateAddress(string $ref, array $data)
-    {
-        return DB::table('addresses')
-            ->where('ref',$ref)
-            ->update($data);
-    }
 }

@@ -1,6 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100;0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;0,9..40,1000;1,9..40,100;1,9..40,200;1,9..40,300;1,9..40,400;1,9..40,500;1,9..40,600;1,9..40,700;1,9..40,800;1,9..40,900;1,9..40,1000&display=swap');
 body{
   font-size: 12px !important;
+  font-family: 'DM Sans', sans-serif !important;
 }
 //when dark mode
 body[data-layout-mode='dark']{
@@ -41,6 +44,17 @@ table tbody tr td {
   padding: 8px !important;
 }
 
+.modal-2xl {
+  max-width: 1300px !important;
+}
+
+.modal-3xl {
+  max-width: 1600px !important;
+}
+
+.modal-4xl {
+  max-width: 1900px !important;
+}
 .modal-backdrop{
   z-index: 1100 !important;
 }
@@ -53,9 +67,78 @@ table tbody tr td {
 .modal-footer {
   padding: 10px 15px 10px 15px !important;
 }
+
 .alert .close {
   display: none;
 }
+
+.close-d-none .ng-clear-wrapper {
+  display: none !important;
+}
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback){
+  height: 28px !important;
+}
+
+label.custom-file-upload input[type="file"] {
+  position: absolute;
+  top: -1000px;
+}
+
+.custom-file-upload {
+  cursor: pointer;
+  border: 1px solid #cccccc;
+  padding: 70px 30px;
+  display: inline-block;
+  color: #fff;
+  background: #8c8c8c;
+  font-size: 14px;
+  background: var(--img-no-uploaded) no-repeat;
+  background-size: cover;
+}
+.custom-file-upload:hover {
+  background: #8c8c8c;
+}
+.custom-file-upload:active {
+  background: #8c8c8c;
+}
+.custom-file-upload:invalid + span {
+  color: #ffffff;
+}
+.custom-file-upload:valid + span {
+  color: #ffffff;
+}
+.upload-img-box img{
+  width: 160px;
+  height: 162px;
+  position: absolute;
+  top: 0;
+  /*margin-left: 15px;*/
+}
+.upload-img-box.cover img{
+  width: 100% !important;
+}
+
+.upload-img-box.cover i{
+  right: -22px !important;
+  z-index: 5 !important;
+  left: unset !important;
+}
+
+.upload-img-box i{
+  position: absolute;
+  left: 160px;
+  cursor: pointer;
+  top: 0;
+  margin-left: 15px;
+  z-index: 5 !important;
+}
+
+.custom-file-upload{
+  width: 160px;
+  height: 162px;
+}
+
+.img-cover{width: 100%; height: 100%; object-fit: cover}
 
 //body[loading = 'true']{
 //

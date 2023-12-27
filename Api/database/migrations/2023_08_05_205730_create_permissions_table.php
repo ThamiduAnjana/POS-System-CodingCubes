@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('permission_ref')->unique()->default(DB::raw('(UUID())'));
             $table->integer('resource_id')->nullable();
             $table->integer('access_policy_id')->nullable();
             $table->tinyInteger('read')->default(0);
@@ -30,7 +30,8 @@ return new class extends Migration
             $table->tinyInteger('print')->default(0);
             $table->tinyInteger('export')->default(0);
             $table->tinyInteger('import')->default(0);
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

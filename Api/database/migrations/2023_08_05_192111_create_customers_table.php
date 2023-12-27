@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('customer_ref')->unique()->default(DB::raw('(UUID())'));
             $table->string('title')->nullable();
             $table->string('initials')->nullable();
             $table->string('first_name');
@@ -28,12 +28,17 @@ return new class extends Migration
             $table->integer('customer_group_id')->nullable()->comment('customer group id');
             $table->integer('payment_term')->nullable();
             $table->tinyInteger('payment_term_type')->nullable()->comment('month = 1, day = 2');
-            $table->float('credit_limit')->nullable()->comment('keep null for no credit limit');
-            $table->float('deposit')->default(0);
+            $table->decimal('credit_limit')->nullable()->comment('keep null for no credit limit');
+            $table->decimal('deposit')->default(0);
             $table->integer('loyalty_card_no')->nullable()->comment('generate uniq random no');
-            $table->float('points')->default(0);
-            $table->float('balance')->default(0);
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->decimal('points')->default(0);
+            $table->decimal('balance')->default(0);
+            $table->string('custom_field_1')->nullable();
+            $table->string('custom_field_2')->nullable();
+            $table->string('custom_field_3')->nullable();
+            $table->string('custom_field_4')->nullable();
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

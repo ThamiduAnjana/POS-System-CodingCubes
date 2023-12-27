@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <h5 class="modal-title mt-0">{{ isEdit ? 'Edit Existing': 'Add New'}} Products</h5>
+  <button type="button" class="btn-close btn-sm" aria-hidden="true" (click)="closeModal()"></button>
+</div>
+<div class="modal-body">
+  <!-- Alert -->
+  <div *ngIf="isInvalid">
+    <ngb-alert type="danger" [dismissible]="false" class="alert alert-dismissible alert-label-icon label-arrow fade">
+      <i class="mdi mdi-block-helper label-icon"></i>
+      <strong>Error</strong> - Fill the required fields!
+    </ngb-alert>
+  </div>
+  <!-- End Alert -->
+
+  <div class="row">
+    <div class="col-12">
+      <h6 class="text-decoration-underline fw-bold">Product Basic Details</h6>
+    </div>
+    <div class="form-group col-4 mb-3">
+      <label class="form-label">Product Name</label>
+      <input type="text" class="form-control form-control-sm" placeholder="Product Name" formControlName="product_name">
+    </div>
+    <div class="form-group col-4 mb-3">
+      <label class="form-label">Short Name</label>
+      <input type="text" class="form-control form-control-sm" placeholder="Short Name" formControlName="short_name">
+    </div>
+    <div class="form-group col-4 mb-3">
+      <label class="form-label">Product SKU(Barcode)</label>
+      <input type="text" class="form-control form-control-sm" placeholder="Product SKU(Barcode)" formControlName="sku">
+    </div>
+    <div class="form-group col-4 mb-3">
+      <label class="form-label">Description</label>
+      <textarea class="form-control form-control-sm" placeholder="Description" formControlName="description" [rows]="1"></textarea>
+    </div>
+    <div class="form-group col-4 mb-3">
+      <p class="fw-medium mb-2">Image</p>
+      <label class="custom-file-upload">
+        <input  *ngIf="imgURL == null" class="form-control d-none" placeholder="Upload Image" [multiple]="false" #file (change)="preview(file.files, $event)" accept="image/*"
+                type="file" formControlName="product_image" >
+        <span>Upload Image</span></label>
+      <div class="upload-img-box" *ngIf="imgURL">
+        <i  class="fa fa-times-circle text-danger" (click)="removeImage()" ></i>
+        <img class="img-cover border-radius-5"  [src]="imgURL" >
+      </div>
+      <p *ngIf="isError" class="text-danger mt-40 ml-3">This image type is not supported.</p>
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary btn-sm" (click)="submitForm()">Save & Add New</button>
+  <button type="button" class="btn btn-success btn-sm" (click)="submitForm()">Save & Exit</button>
+  <button type="button" class="btn btn-light btn-sm" (click)="closeModal()">Close</button>
+</div>

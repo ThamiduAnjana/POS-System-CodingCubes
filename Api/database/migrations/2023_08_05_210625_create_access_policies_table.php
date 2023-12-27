@@ -14,10 +14,11 @@ return new class extends Migration
     {
         Schema::create('access_policies', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('access_policy_ref')->unique()->default(DB::raw('(UUID())'));
             $table->string('name')->nullable();
             $table->text('description')->nullable();
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
