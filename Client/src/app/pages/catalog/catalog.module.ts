@@ -4,7 +4,14 @@ import { CommonModule } from '@angular/common';
 import { CatalogRoutingModule } from './catalog-routing.module';
 import { ProductsComponent } from './products/products.component';
 import {SharedModule} from "../../shared/shared.module";
-import {NgbAlert, NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbPagination} from "@ng-bootstrap/ng-bootstrap";
+import {
+    NgbAlert,
+    NgbDropdown,
+    NgbDropdownMenu,
+    NgbDropdownToggle,
+    NgbInputDatepicker,
+    NgbPagination
+} from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgSelectModule} from "@ng-select/ng-select";
 import { VariationsComponent } from './variations/variations.component';
@@ -36,7 +43,8 @@ import { WarrantiesComponent } from './warranties/warranties.component';
         NgbPagination,
         NgSelectModule,
         ReactiveFormsModule,
-        NgbAlert
+        NgbAlert,
+        NgbInputDatepicker
     ]
 })
 export class CatalogModule { }

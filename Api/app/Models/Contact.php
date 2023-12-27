@@ -10,77 +10,47 @@ class Contact extends Model
 {
     use HasFactory;
 
-    public function getContact()
+    protected $table = 'contacts';
+
+    protected $fillable = [
+        'contact_ref',
+        'owner_type',
+        'owner_id',
+        'contact_no',
+        'is_primary',
+        'is_active',
+        'location_id',
+        'created_by',
+        'updated_by'
+    ];
+
+    protected $casts = [
+        'is_primary' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+
+    public static function getContacts()
     {
-        return DB::table('contacts')
-            ->select('id','ref','who_is','who_id','contact','is_primary','status')
+        return Contact::select('contacts.id', 'contacts.contact_ref', 'contacts.owner_type', 'contacts.owner_id', 'contacts.contact_no',
+            'contacts.is_primary', 'contacts.is_active', 'contacts.location_id', 'locations.name as location_name', 'contacts.created_at',
+            'contacts.created_by', 'contacts.updated_at', 'contacts.updated_by',
+            DB::raw('(SELECT users.first_name FROM users WHERE users.id = contacts.created_by) as created_by_name'),
+            DB::raw('(SELECT users.first_name FROM users WHERE users.id = contacts.updated_by) as updated_by_name'))
+            ->leftJoin('locations', 'locations.id', '=', 'contacts.location_id')
+            ->where('contacts.is_active', 1)
             ->get();
     }
 
-    public function getContactByRef(string $ref)
+    public static function getContact(array $filters)
     {
-        return DB::table('contacts')
-            ->select('id','ref','who_is','who_id','contact','is_primary','status')
-            ->where('ref',$ref)
+        return Contact::select('contacts.id', 'contacts.contact_ref', 'contacts.owner_type', 'contacts.owner_id', 'contacts.contact_no',
+            'contacts.is_primary', 'contacts.is_active', 'contacts.location_id', 'locations.name as location_name', 'contacts.created_at',
+            'contacts.created_by', 'contacts.updated_at', 'contacts.updated_by',
+            DB::raw('(SELECT users.first_name FROM users WHERE users.id = contacts.created_by) as created_by_name'),
+            DB::raw('(SELECT users.first_name FROM users WHERE users.id = contacts.updated_by) as updated_by_name'))
+            ->leftJoin('locations', 'locations.id', '=', 'contacts.location_id')
+            ->where($filters)
             ->first();
-    }
-
-    public function getContactByPage(int $start_no,int $page_size,array $filters, bool $is_get_total = false)
-    {
-        $sql = DB::table('contacts')
-            ->select('id','ref','who_is','who_id','contact','is_primary','status');
-
-        if($filters['keyword'] != ''){
-            $sql->where(function ($q) use ($filters) {
-                $q->where('contact', 'LIKE', '%' . $filters['keyword'] . '%');
-            });
-        }
-
-        if($filters['is_primary'] === 0){
-            $sql->where('is_primary',0);
-        }else if($filters['is_primary'] === 1){
-            $sql->where('is_primary',1);
-        } else {
-            $sql->whereIn('is_primary',[0,1]);
-        }
-
-        if($filters['status'] === 0){
-            $sql->where('status',0);
-        }else if($filters['status'] === 1){
-            $sql->where('status',1);
-        } else {
-            $sql->whereIn('status',[0,1]);
-        }
-
-        if($is_get_total){
-            return $sql->count();
-        } else {
-            return  $sql->orderBy('id','DESC')
-                ->skip($start_no)
-                ->take($page_size)
-                ->get();
-        }
-    }
-
-    public function getContactWhere(array $data)
-    {
-        return DB::table('contacts')
-            ->select('id','ref','who_is','who_id','contact','is_primary','status')
-            ->where($data)
-            ->get();
-    }
-
-    public function saveContact(array $data)
-    {
-        return DB::table('contacts')
-            ->insertGetId($data);
-    }
-
-    public function updateContact(string $ref, array $data)
-    {
-        return DB::table('contacts')
-            ->where('ref',$ref)
-            ->update($data);
     }
 
 }

@@ -14,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('employee_ref')->unique()->default(DB::raw('(UUID())'));
             $table->string('title')->nullable();
             $table->string('initials')->nullable();
-            $table->string('first_name');
+            $table->string('first_name')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
             $table->tinyInteger('sex')->nullable();
@@ -25,23 +25,14 @@ return new class extends Migration
             $table->string('passport')->nullable();
             $table->string('driving_license')->nullable();
             $table->date('dob')->nullable();
-            $table->float('discount_rate')->nullable()->comment('discount limit');
-            $table->float('commission_rate')->nullable();
-            $table->float('basic_salary')->nullable();
-            $table->longText('allowances')->nullable()->comment('json = [id, amount]');
-            $table->float('ot_rate')->nullable();
-            $table->float('insurance')->nullable();
-            $table->float('epf_rate')->nullable();
-            $table->float('etf_rate')->nullable();
-            $table->float('stamp_duty')->nullable();
-            $table->integer('salary_type_id')->default(1)->comment('month = 1, day = 2');
-            $table->tinyInteger('department_id')->nullable()->comment('management = 1, hr = 2, accounting = 3, production & stork management = 4, sales & marketing = 5' );
-            $table->tinyInteger('is_rep')->default(0);
-            $table->string('username')->nullable();
-            $table->string('password')->nullable();
-            $table->string('validation_code')->nullable();
-            $table->dateTime('validation_at')->nullable();
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->decimal('discount_rate')->nullable()->comment('discount limit');
+            $table->tinyInteger('is_rep')->default(0)->comment('0 = no, 1 = yes');
+            $table->string('custom_field_1')->nullable();
+            $table->string('custom_field_2')->nullable();
+            $table->string('custom_field_3')->nullable();
+            $table->string('custom_field_4')->nullable();
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

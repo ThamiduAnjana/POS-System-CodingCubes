@@ -14,11 +14,12 @@ return new class extends Migration
     {
         Schema::create('product_prices', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
-            $table->integer('product_id')->nullable();
+            $table->string('product_price_ref')->unique()->default(DB::raw('(UUID())'));
+            $table->integer('product_cost_id')->nullable();
             $table->integer('price_group_id')->nullable();
-            $table->decimal('price')->nullable();
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->decimal('amount')->nullable();
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

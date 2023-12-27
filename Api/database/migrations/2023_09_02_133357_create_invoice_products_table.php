@@ -14,18 +14,18 @@ return new class extends Migration
     {
         Schema::create('invoice_products', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('invoice_product_ref')->unique()->default(DB::raw('(UUID())'));
             $table->integer('invoice_id')->nullable();
-            $table->integer('product_id')->nullable();
+            $table->integer('product_list_id')->nullable();
             $table->longText('product_details')->nullable()->comment('product details in json');
-            $table->decimal('qty')->nullable();
+            $table->decimal('quantity')->nullable();
             $table->decimal('cost')->nullable();
             $table->decimal('price')->nullable();
             $table->decimal('discount')->nullable();
             $table->decimal('tax')->nullable();
             $table->decimal('total')->nullable();
             $table->integer('employee_id')->nullable()->comment('sale-rep');
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

@@ -14,11 +14,11 @@ return new class extends Migration
     {
         Schema::create('variations', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('variation_ref')->unique()->default(DB::raw('(UUID())'));
             $table->string('name')->nullable();
-            $table->string('value')->nullable()->comment('as json');
             $table->string('description')->nullable();
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

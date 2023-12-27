@@ -14,14 +14,13 @@ return new class extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('unit_ref')->unique()->default(DB::raw('(UUID())'));
             $table->string('name')->nullable();
-            $table->string('short_name')->nullable();
-            $table->tinyInteger('is_decimal')->default(0)->comment('0 = false,1 = true');
-            $table->integer('child_id')->nullable();
-            $table->decimal('value')->nullable();
+            $table->string('symbol')->nullable();
             $table->string('description')->nullable();
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->tinyInteger('is_decimal')->default(0)->comment('0 = false,1 = true');
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

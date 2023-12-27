@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('supplier_representatives', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('supplier_representative_ref')->unique()->default(DB::raw('(UUID())'));
             $table->string('title')->nullable();
             $table->string('initials')->nullable();
             $table->string('first_name');
@@ -27,7 +27,12 @@ return new class extends Migration
             $table->date('dob')->nullable();
             $table->integer('supplier_id')->nullable();
             $table->tinyInteger('is_primary')->default(0);
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->string('custom_field_1')->nullable();
+            $table->string('custom_field_2')->nullable();
+            $table->string('custom_field_3')->nullable();
+            $table->string('custom_field_4')->nullable();
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

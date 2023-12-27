@@ -63,6 +63,7 @@
     "ngx-lightbox": "^3.0.0",
     "ngx-mask": "^14.2.4",
     "ngx-owl-carousel-o": "^15.0.0",
+    "ngx-toastr": "^17.0.2",
     "ngx-ui-switch": "^14.0.3",
     "ngx-youtube-player": "^12.0.2",
     "rxjs": "^7.6.0",

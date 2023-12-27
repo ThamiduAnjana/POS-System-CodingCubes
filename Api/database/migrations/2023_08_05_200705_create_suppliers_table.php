@@ -14,14 +14,19 @@ return new class extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
+            $table->string('supplier_ref')->unique()->default(DB::raw('(UUID())'));
             $table->string('name');
             $table->integer('payment_term')->nullable();
             $table->tinyInteger('payment_term_type')->nullable()->comment('month = 1, day = 2');
-            $table->float('credit_limit')->nullable()->comment('keep null for no credit limit');
-            $table->float('deposit')->default(0);
-            $table->float('balance')->default(0);
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->decimal('credit_limit')->nullable()->comment('keep null for no credit limit');
+            $table->decimal('deposit')->default(0);
+            $table->decimal('balance')->default(0);
+            $table->string('custom_field_1')->nullable();
+            $table->string('custom_field_2')->nullable();
+            $table->string('custom_field_3')->nullable();
+            $table->string('custom_field_4')->nullable();
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

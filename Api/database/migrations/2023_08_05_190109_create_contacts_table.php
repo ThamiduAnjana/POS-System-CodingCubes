@@ -14,12 +14,13 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('ref')->unique()->default(DB::raw('(UUID())'));
-            $table->integer('owner_type')->nullable()->comment('1 = employee, 2 = customer, 3 = supplier, 4 = supplier representative');
+            $table->string('contact_ref')->unique()->default(DB::raw('(UUID())'));
+            $table->integer('owner_type')->default(1)->comment('1 = employee, 2 = customer, 3 = supplier, 4 = supplier representative');
             $table->integer('owner_id')->nullable();
-            $table->integer('contact')->nullable();
+            $table->string('contact_no')->nullable();
             $table->tinyInteger('is_primary')->default(0);
-            $table->tinyInteger('status')->default(1)->comment('active = 1, inactive = 0');
+            $table->tinyInteger('is_active')->default(1)->comment('active = 1, inactive = 0');
+            $table->integer('location_id')->nullable();
             $table->dateTime('created_at')->useCurrent();
             $table->integer('created_by')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));

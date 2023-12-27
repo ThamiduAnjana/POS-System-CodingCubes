@@ -1,6 +1,9 @@
-import {Component, TemplateRef} from '@angular/core';
+import {Component, inject, TemplateRef} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
+import {NgbCalendar, NgbDate, NgbDateParserFormatter, NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
+import {CreateProductComponent} from "../../../shared/components/create-product/create-product.component";
+import {DATEFILTERS} from "../../../shared/utilities/date-filters";
+import {SystemInformationComponent} from "../../../shared/components/system-information/system-information.component";
 
 @Component({
   selector: 'app-products',
@@ -10,18 +13,21 @@ import {NgbModal, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 export class ProductsComponent {
 
   breadCrumbItems!: Array<{}>;
-  private modalInstances: { [key: string]: NgbModalRef } = {}; // Object to store modal instances
+  modelRef!: NgbModalRef;
+  dateFilters: any = DATEFILTERS;
+
+  calendar = inject(NgbCalendar);
+  formatter = inject(NgbDateParserFormatter);
+  hoveredDate: NgbDate | null = null;
+  fromDate: NgbDate | null = this.calendar.getToday();
+  toDate: NgbDate | null = null;
 
   page = 1;
   pageSize = 10;
   pageSizes = [10, 25, 50, 100];
   totalRecords = 0;
+  formData = [];
   settings = [];
-
-  isEdit = false;
-  isInvalid = false;
-  isSubmitted = false;
-
   productList = [];
 
   filterForm!: FormGroup;
@@ -30,6 +36,11 @@ export class ProductsComponent {
   {
     this.filterForm = this.formBuilder.group({
       keyword: [''],
+      created_at: ['all'],
+      date: {
+        from: this.fromDate,
+        to: this.toDate,
+      },
       status: [1],
     });
   }
@@ -50,21 +61,75 @@ export class ProductsComponent {
 
 
 
-  openModel(model: TemplateRef<any>, ref: string, options: Object = {size: 'lg'})
+  openModel(data:any = null, isEdit = false)
   {
-    const modelInstance = this.modalService.open(model, options);
-    this.modalInstances[ref] = modelInstance;
+    this.modelRef = this.modalService.open(CreateProductComponent, {size: '2xl', backdrop: 'static', keyboard: false});
+    this.modelRef.componentInstance.formData = { 'product_ref' : data , 'isEdit' : isEdit, 'form_data' : this.formData };
+    this.modelRef.result.then((result) => {
+      if(result)
+      {
+        this.getProducts();
+      }
+    }, (reason) => {
+      console.log(reason);
+    });
   }
 
-  closeModal(ref: string)
+  openInformationModel()
   {
-    if(this.modalInstances[ref])
-    {
-      this.modalInstances[ref].close(); // Close the modal instance
-      if(Object.keys(this.modalInstances).length <= 1)
-      {
-        delete this.modalInstances[ref]; // Remove from the modalInstances object
-      }
-    }
+    this.modelRef = this.modalService.open(SystemInformationComponent, {size: '2xl', backdrop: 'static', keyboard: false});
+    this.modelRef.componentInstance.formData = { 'from' : 'products_screen' };
   }
+
+  onDateSelection(date: NgbDate)
+  {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
+      this.toDate = date;
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+    }
+    this.updateDateRange();
+  }
+
+  updateDateRange()
+  {
+    this.filterForm.patchValue({
+      date: {
+        from: this.fromDate,
+        to: this.toDate,
+      },
+    });
+  }
+
+  isHovered(date: NgbDate)
+  {
+    return (
+      this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate)
+    );
+  }
+
+  isInside(date: NgbDate)
+  {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate)
+  {
+    return (
+      date.equals(this.fromDate) ||
+      (this.toDate && date.equals(this.toDate)) ||
+      this.isInside(date) ||
+      this.isHovered(date)
+    );
+  }
+
+  validateInput(currentValue: NgbDate | null, input: string): NgbDate | null
+  {
+    const parsed = this.formatter.parse(input);
+    return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+  }
+
 }
